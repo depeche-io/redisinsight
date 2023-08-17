@@ -64,3 +64,10 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.ingress.enabled }}
+      env:
+        - name: RIPROXYENABLE
+          value: "true"
+        - name: RITRUSTEDORIGINS
+          value: {{ .Values.ingress.host | quote }}
+      {{- end }}
