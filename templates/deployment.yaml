@@ -52,6 +52,13 @@ spec:
           volumeMounts:
             - name: db
               mountPath: /db
+          {{- if .Values.ingress.enabled }}
+          env:
+            - name: RIPROXYENABLE
+              value: "true"
+            - name: RITRUSTEDORIGINS
+              value: {{ .Values.ingress.host | quote }}
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -63,11 +70,4 @@ spec:
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- if .Values.ingress.enabled }}
-      env:
-        - name: RIPROXYENABLE
-          value: "true"
-        - name: RITRUSTEDORIGINS
-          value: {{ .Values.ingress.host | quote }}
       {{- end }}
